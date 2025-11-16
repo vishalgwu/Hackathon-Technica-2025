@@ -121,57 +121,9 @@ future_improvements:
   - Add real-time notifications
   - Implement GPT-4o / R1 reasoning
   - Build mobile dashboard version
-folder_structure: |
-  Hackathon-Technica-2025/
-  │
-  ├── data/                                 # Raw + processed files
-  │   ├── raw_pdfs/                         # Uploaded PDF/Image statements
-  │   └── structured/                       # Parsed transactions (.parquet)
-  │
-  ├── src/                                  # Full project source code
-  │   ├── backend/                          # All backend + agents + RAG
-  │   │   ├── agents/                       # All agents (LLM-driven tools)
-  │   │   │   ├── __init__.py
-  │   │   │   ├── base.py
-  │   │   │   ├── classification_agent.py
-  │   │   │   ├── compliance_agent.py
-  │   │   │   ├── dispatcher_agent.py
-  │   │   │   ├── extraction_agent.py
-  │   │   │   ├── summary_agent.py
-  │   │   │   ├── tax_agent.py
-  │   │   │   ├── tax_agent_v2.py
-  │   │   │   └── spending_agent.py
-  │   │   │
-  │   │   ├── config.py                     # Settings, paths, constants
-  │   │   ├── dispatcher.py                 # Main multi-agent router
-  │   │   ├── ingestion_v2.py               # PDF/Image → structured data
-  │   │   ├── orchestrator.py               # Backend flow controller
-  │   │   ├── parsing.py                    # OCR + text extraction logic
-  │   │   ├── rag.py                        # Retrieval-Augmented Generation
-  │   │   ├── store.py                      # Qdrant vector DB operations
-  │   │
-  │   │   ├── debug_classification.py       # Debug helpers
-  │   │   ├── debug_compliance.py
-  │   │   ├── debug_dispatcher.py
-  │   │   ├── debug_summary.py
-  │   │   ├── debug_tax.py
-  │   │   └── debug/
-  │
-  │   └── frontend/                         # Streamlit UI
-  │       ├── __init__.py
-  │       └── app.py                        # Main dashboard
-  │
-  ├── main.py                               # Entrypoint (optional)
-  ├── req.txt                               # Requirements
-  ├── README.md                             # Main documentation
-  ├── .env                                  # API keys (ignored in git)
-  ├── .gitignore
-  ├── Dockerfile                            # Deployment container spec
-  ├── fly.toml                              # Fly.io config
-  ├── Image.png
-  ├── supervisord.conf                      # Process manager config
-  ├── test.py                               # Local tests
-  └── test_gemini.py                        # Gemini model testing
+
+
+
 
 
 
