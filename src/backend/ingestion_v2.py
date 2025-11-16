@@ -205,6 +205,37 @@ def ingest_all_receipts():
     logger.info("Saved structured data.")
 
     return df
+# =====================================================================
+#  API-FRIENDLY WRAPPER FOR SINGLE UPLOAD (Streamlit/FastAPI)
+# =====================================================================
+def process_bank_statement(uploaded_file):
+    """
+    Takes an uploaded PDF/image from FastAPI, saves it, runs OCR + parsing,
+    and returns parsed receipts for THIS file only.
+    """
+
+    # 1. Save the uploaded file into RAW_PDF_DIR
+    RAW_PDF_DIR.mkdir(parents=True, exist_ok=True)
+    saved_path = RAW_PDF_DIR / uploaded_file.filename
+
+    with open(saved_path, "wb") as f:
+        f.write(uploaded_file.file.read())
+
+    logger.info(f"Saved uploaded file: {saved_path}")
+
+    # 2. Run ingestion on ALL PDFs (your pipeline processes all PDFs)
+    df = ingest_all_receipts()
+
+    # 3. Filter only rows belonging to this file
+    base_id = saved_path.stem  # filename without .pdf
+    filtered = df[df["file_id"].str.contains(base_id)]
+
+    # 4. Convert the `parsed` JSON strings back into Python objects
+    output = []
+    for _, row in filtered.iterrows():
+        output.append(json.loads(row["parsed"]))
+
+    return output
 
 
 if __name__ == "__main__":

@@ -83,3 +83,4 @@ unstructured[pdf]==0.15.0
 matplotlib==3.9.2
 pymupdf
 scikit-learn==1.5.2
+plotly

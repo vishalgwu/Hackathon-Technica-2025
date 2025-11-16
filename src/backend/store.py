@@ -12,6 +12,10 @@ from .logger import get_logger
 
 logger = get_logger(__name__)
 
+
+############################################################
+# BUILD VECTOR STORE (CALLED AFTER INGESTION)
+############################################################
 def build_vectorstore():
     logger.info("Loading structured data...")
 
@@ -25,7 +29,6 @@ def build_vectorstore():
     logger.info("Converting rows into documents...")
     docs = []
     for _, row in df.iterrows():
-
         parsed_preview = str(row["parsed"])[:500]
 
         text = (
@@ -61,5 +64,63 @@ def build_vectorstore():
     return vectordb
 
 
+
+############################################################
+# LOAD VECTOR STORE FOR QUERY (USED BY API + STREAMLIT)
+############################################################
+
+vectordb_cached = None  # Global cache for performance
+
+
+def load_vector_store():
+    """
+    Loads an existing Chroma vectorstore from disk.
+    Called once when backend starts.
+    """
+    global vectordb_cached
+
+    embed_model = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
+    )
+
+    vectordb_cached = Chroma(
+        embedding_function=embed_model,
+        persist_directory=str(VECTOR_DIR)
+    )
+
+    logger.info("Vectorstore loaded successfully.")
+    return vectordb_cached
+
+
+
+############################################################
+# SEMANTIC SEARCH FUNCTION
+############################################################
+def query_vector_store(query: str):
+    """
+    Performs semantic search on the vectorstore and returns top matches.
+    """
+    global vectordb_cached
+
+    if vectordb_cached is None:
+        load_vector_store()  # Auto-load if not loaded yet
+
+    results = vectordb_cached.similarity_search_with_relevance_scores(query, k=5)
+
+    output = []
+    for doc, score in results:
+        output.append({
+            "score": float(score),
+            "content": doc.page_content,
+            "metadata": doc.metadata
+        })
+
+    return output
+
+
+
+############################################################
+# SCRIPT ENTRY POINT
+############################################################
 if __name__ == "__main__":
     build_vectorstore()

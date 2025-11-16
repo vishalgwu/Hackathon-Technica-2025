@@ -24,37 +24,17 @@ project:
       - FastAPI
       - Uvicorn
     ai_models:
+      - Google Gemini API
       - OpenAI GPT-4o-mini
-      - Google Gemini
     vector_search:
       - Sentence Transformers MiniLM embeddings
+      - Qdrant
     data_processing:
       - Pandas
       - OCR parsing
     visualization:
       - Streamlit charts
       - Plotly express
-
-folder_structure: |
-    Hackathon-Technica-2025/
-    ├── data/
-    │   ├── raw_pdfs/
-    │   └── structured/
-    ├── src/
-    │   ├── backend/
-    │   │   ├── ingestion_v2.py
-    │   │   ├── dispatcher.py
-    │   │   ├── store.py
-    │   │   └── agents/
-    │   │       ├── summary_agent.py
-    │   │       ├── tax_agent.py
-    │   │       ├── spending_agent.py
-    │   │       └── compliance_agent.py
-    │   └── frontend/
-    │       └── app.py
-    ├── req.txt
-    ├── .env
-    └── README.md
 
 installation:
   clone_repo: |
@@ -63,7 +43,9 @@ installation:
 
   create_venv: |
     python -m venv hack
-    hack\Scripts\activate
+    hack\Scripts\activate  # Windows
+    # Alternatively for macOS/Linux:
+    # source hack/bin/activate
 
   install_requirements: |
     pip install -r req.txt
@@ -75,16 +57,13 @@ installation:
 run_app:
   backend: |
     uvicorn src.backend.dispatcher:app --reload
-
   backend_urls:
     - http://127.0.0.1:8000
     - http://127.0.0.1:8000/docs
 
   frontend: |
     streamlit run src/frontend/app.py
-
-  frontend_url:
-    - http://localhost:8501
+  frontend_url: http://localhost:8501
 
 multi_agent_system:
   summary_agent: |
@@ -94,7 +73,7 @@ multi_agent_system:
     Identifies tax-deductible expenses (meals, travel, work-related items).
 
   spending_patterns_agent: |
-    Generates KPIs, spending over time, category pie chart, and top 10 transactions.
+    Generates KPIs, spending over time, category distribution, and top transactions.
     Supports natural-language questions.
 
   compliance_agent: |
@@ -107,13 +86,14 @@ rag_pipeline:
     - Build vector documents with metadata
     - Store embeddings locally
     - Query vector DB when user asks a question
-    - Add retrieved context to LLM prompt
+    - Add retrieved context to the LLM prompt
     - Return final AI-reasoned answer
 
 api_endpoints:
   - path: "/process"
     method: "POST"
     description: "Uploads PDF/Image → Returns parsed transactions"
+
   - path: "/query"
     method: "POST"
     description: "RAG + LLM reasoning. All agents operate through this endpoint."
@@ -126,8 +106,8 @@ deployment_options:
     - AWS EC2
 
   notes: |
-    The Streamlit frontend and FastAPI backend can be deployed 
-    together (single VM) or separately on different services.
+    The Streamlit frontend and FastAPI backend can be deployed
+    together on a single VM or separately on different services.
 
 testing:
   run_tests: |
@@ -139,8 +119,63 @@ future_improvements:
   - Add multi-user support
   - Connect to Postgres database
   - Add real-time notifications
-  - Implement GPT-4o or R1 reasoning mode
-  - Build mobile version of the dashboard
+  - Implement GPT-4o / R1 reasoning
+  - Build mobile dashboard version
+
+
+folder_structure: |
+  Hackathon-Technica-2025/
+  ├── data/
+  │   ├── raw_pdfs/
+  │   └── structured/
+  │
+  ├── hack/                     # venv (ignored in git)
+  │
+  ├── src/
+  │   ├── backend/
+  │   │   ├── agents/
+  │   │   │   ├── __init__.py
+  │   │   │   ├── base.py
+  │   │   │   ├── classification_agent.py
+  │   │   │   ├── compliance_agent.py
+  │   │   │   ├── dispatcher_agent.py
+  │   │   │   ├── extraction_agent.py
+  │   │   │   ├── summary_agent.py
+  │   │   │   ├── tax_agent.py
+  │   │   │   ├── tax_agent_v2.py
+  │   │   │   └── spending_agent.py
+  │   │   │
+  │   │   ├── config.py
+  │   │   ├── debug_classification.py
+  │   │   ├── debug_compliance.py
+  │   │   ├── debug_dispatcher.py
+  │   │   ├── debug_summary.py
+  │   │   ├── debug_tax.py
+  │   │   ├── dispatcher.py
+  │   │   ├── ingestion_v2.py
+  │   │   ├── orchestrator.py
+  │   │   ├── parsing.py
+  │   │   ├── rag.py
+  │   │   └── store.py
+  │   │
+  │   └── frontend/
+  │       ├── __init__.py
+  │       └── app.py
+  │
+  ├── .env
+  ├── .gitignore
+  ├── Dockerfile
+  ├── fly.toml
+  ├── Image.png
+  ├── main.py
+  ├── README.md
+  ├── req.txt
+  ├── supervisord.conf
+  ├── test_gemini.py
+  └── test.py
+
+
+
 
 author:
   name: "Vishal Fulsundar"
@@ -148,5 +183,5 @@ author:
   interests:
     - AI/ML Engineering
     - Multi-Agent Systems
-    - RAG architectures
+    - RAG Architectures
     - Applied Machine Learning
