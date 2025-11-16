@@ -1,0 +1,6 @@
+hack/
+__pycache__/
+*.pyc
+.env
+data/raw_pdfs/
+data/structured/
