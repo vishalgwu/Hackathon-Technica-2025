@@ -111,8 +111,8 @@ deployment_options:
 
 testing:
   run_tests: |
-    python src/backend/test.py
-    python src/backend/test_gemini.py
+    python test.py
+    python test_gemini.py
 
 future_improvements:
   - Add authentication (JWT)
@@ -122,58 +122,102 @@ future_improvements:
   - Implement GPT-4o / R1 reasoning
   - Build mobile dashboard version
 
-
 folder_structure: |
-  Hackathon-Technica-2025/
-  ├── data/
-  │   ├── raw_pdfs/
-  │   └── structured/
-  │
-  ├── hack/                     # venv (ignored in git)
-  │
-  ├── src/
-  │   ├── backend/
-  │   │   ├── agents/
-  │   │   │   ├── __init__.py
-  │   │   │   ├── base.py
-  │   │   │   ├── classification_agent.py
-  │   │   │   ├── compliance_agent.py
-  │   │   │   ├── dispatcher_agent.py
-  │   │   │   ├── extraction_agent.py
-  │   │   │   ├── summary_agent.py
-  │   │   │   ├── tax_agent.py
-  │   │   │   ├── tax_agent_v2.py
-  │   │   │   └── spending_agent.py
-  │   │   │
-  │   │   ├── config.py
-  │   │   ├── debug_classification.py
-  │   │   ├── debug_compliance.py
-  │   │   ├── debug_dispatcher.py
-  │   │   ├── debug_summary.py
-  │   │   ├── debug_tax.py
-  │   │   ├── dispatcher.py
-  │   │   ├── ingestion_v2.py
-  │   │   ├── orchestrator.py
-  │   │   ├── parsing.py
-  │   │   ├── rag.py
-  │   │   └── store.py
-  │   │
-  │   └── frontend/
-  │       ├── __init__.py
-  │       └── app.py
-  │
-  ├── .env
-  ├── .gitignore
-  ├── Dockerfile
-  ├── fly.toml
-  ├── Image.png
-  ├── main.py
-  ├── README.md
-  ├── req.txt
-  ├── supervisord.conf
-  ├── test_gemini.py
-  └── test.py
+Hackathon-Technica-2025/
+│
+├── data/                                 # Raw + processed files
+│   ├── raw_pdfs/                         # Uploaded PDF/Image statements
+│   └── structured/                       # Parsed transactions (.parquet)
 
+│
+
+├── src/                                  # Full project source code
+
+│   ├── backend/                          # All backend + agents + RAG
+
+│   │   ├── agents/                       # All agents (LLM-driven tools)
+
+│   │   │   ├── __init__.py
+
+│   │   │   ├── base.py
+
+│   │   │   ├── classification_agent.py
+
+│   │   │   ├── compliance_agent.py
+
+│   │   │   ├── dispatcher_agent.py
+
+│   │   │   ├── extraction_agent.py
+
+│   │   │   ├── summary_agent.py
+
+│   │   │   ├── tax_agent.py
+
+│   │   │   ├── tax_agent_v2.py
+
+│   │   │   └── spending_agent.py
+
+│   │   │
+
+│   │   ├── config.py                     # Settings, paths, constants
+
+│   │   ├── dispatcher.py                 # Main multi-agent router
+
+│   │   ├── ingestion_v2.py               # PDF/Image → structured data
+
+│   │   ├── orchestrator.py               # Backend flow controller
+
+│   │   ├── parsing.py                    # OCR + text extraction logic
+
+│   │   ├── rag.py                        # Retrieval-Augmented Generation
+
+│   │   ├── store.py                      # Qdrant vector DB operations
+
+│   │   │
+
+│   │   ├── debug_classification.py       # Debug helpers
+
+│   │   ├── debug_compliance.py
+
+│   │   ├── debug_dispatcher.py
+
+│   │   ├── debug_summary.py
+
+│   │   ├── debug_tax.py
+
+│   │   └── debug/
+
+│   │
+
+│   └── frontend/                         # Streamlit UI
+
+│       ├── __init__.py
+
+│       └── app.py                        # Main dashboard
+
+│
+
+├── main.py                               # Entrypoint (optional)
+
+├── req.txt                               # Requirements
+
+├── README.md                             # Main documentation
+
+├── .env                                  # API keys (ignored in git)
+
+├── .gitignore
+
+├── Dockerfile                            # Deployment container spec
+
+├── fly.toml                              # Fly.io config
+
+├── Image.png                             
+
+├── supervisord.conf                      # Process manager config
+
+├── test.py                               # Local tests
+
+└── test_gemini.py                        # Gemini model testing
 
 
 
