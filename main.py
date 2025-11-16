@@ -1,16 +1,16 @@
-# This is a sample Python script.
+import streamlit as st
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+st.set_page_config(page_title="Hackathon App", page_icon="⚡")
 
+st.title("🚀 Hackathon Technica – Phase 0")
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+uploaded_file = st.file_uploader(
+    "Upload a PDF or Image",
+    type=["pdf", "png", "jpg", "jpeg"]
+)
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if uploaded_file:
+    st.success(f"Received file: {uploaded_file.name}")
+    st.write(f"Size: {len(uploaded_file.getvalue())} bytes")
+else:
+    st.info("Please upload a file to test Phase 0.")
